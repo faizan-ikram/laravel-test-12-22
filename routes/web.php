@@ -16,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('private/temp/{path}', function (string $path){
+    if (! \request()->hasValidSignature()) {
+        abort(401);
+    }
+    return Storage::disk('private')->download($path);
+})->name('private.temp');
